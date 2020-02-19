@@ -13,9 +13,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v1
     - name: PDK validate
-      run: pdk validate --parallel
+      # TODO: Not running ruby validator yet, very noisy
+      run: |
+        pdk validate metadata &&
+        pdk validate yaml &&
+        pdk validate puppet &&
+        pdk validate tasks
     - name: PDK build
-      run: pdk build && mv $(ls -d ./pkg/*) ./pkg/module.tar.gz
+      run: |
+        pdk build &&
+        mv $(ls -d ./pkg/*) ./pkg/module.tar.gz
     - name: Publish to Puppet Forge
       uses: call/dockerfile-curl@master
       with:
