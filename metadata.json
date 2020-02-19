@@ -1,7 +1,7 @@
 {
-  "name": "thekevjames-homebrew",
-  "version": "1.8.3",
-  "author": "thekevjames",
+  "name": "call-homebrew",
+  "version": "1.9.0",
+  "author": "call",
   "summary": "Homebrew (+brewcask! +taps!) package installer and provider",
   "license": "Apache-2.0",
   "source": "https://github.com/TheKevJames/puppet-homebrew",
@@ -10,7 +10,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.2.0 < 5.0.0"
+      "version_requirement": ">= 4.2.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -25,7 +25,7 @@
     },
     {
       "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 6.0.0"
+      "version_requirement": ">= 4.0.0 < 7.0.0"
     }
   ],
   "pdk-version": "1.16.0",
