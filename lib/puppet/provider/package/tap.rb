@@ -1,7 +1,7 @@
-require 'puppet/provider/package'
+require "puppet/provider/package"
 
 Puppet::Type.type(:package).provide(:tap, :parent => Puppet::Provider::Package) do
-  desc 'Tap management using HomeBrew on OSX'
+  desc "Tap management using HomeBrew on OSX"
 
   confine :operatingsystem => :darwin
 
@@ -10,13 +10,13 @@ Puppet::Type.type(:package).provide(:tap, :parent => Puppet::Provider::Package) 
 
   has_feature :install_options
 
-  commands :brew => '/usr/local/bin/brew'
-  commands :stat => '/usr/bin/stat'
+  commands :brew => "/usr/local/bin/brew"
+  commands :stat => "/usr/bin/stat"
 
   def self.execute(cmd, failonfail = false, combine = false)
-    owner = stat('-nf', '%Uu', '/usr/local/bin/brew').to_i
-    group = stat('-nf', '%Ug', '/usr/local/bin/brew').to_i
-    home  = Etc.getpwuid(owner).dir
+    owner = stat("-nf", "%Uu", "/usr/local/bin/brew").to_i
+    group = stat("-nf", "%Ug", "/usr/local/bin/brew").to_i
+    home = Etc.getpwuid(owner).dir
 
     if owner == 0
       raise Puppet::ExecutionFailure, 'Homebrew does not support installations owned by the "root" user. Please check the permissions of /usr/local/bin/brew'
@@ -34,11 +34,11 @@ Puppet::Type.type(:package).provide(:tap, :parent => Puppet::Provider::Package) 
     if Puppet.features.bundled_environment?
       Bundler.with_clean_env do
         super(cmd, :uid => uid, :gid => gid, :combine => combine,
-              :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                   :custom_environment => { "HOME" => home }, :failonfail => failonfail)
       end
     else
       super(cmd, :uid => uid, :gid => gid, :combine => combine,
-            :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                 :custom_environment => { "HOME" => home }, :failonfail => failonfail)
     end
   end
 
@@ -82,9 +82,9 @@ Puppet::Type.type(:package).provide(:tap, :parent => Puppet::Provider::Package) 
       output = execute([command(:brew), :tap])
       output.each_line do |line|
         line.chomp!
-        next unless [resource_name, resource_name.gsub('homebrew-', '')].include?(line.downcase)
+        next unless [resource_name, resource_name.gsub("homebrew-", "")].include?(line.downcase)
 
-        return { :name => line, :ensure => 'present', :provider => 'tap' }
+        return { :name => line, :ensure => "present", :provider => "tap" }
       end
     rescue Puppet::ExecutionFailure => detail
       Puppet.Err "Could not query tap: #{detail}"
@@ -103,7 +103,7 @@ Puppet::Type.type(:package).provide(:tap, :parent => Puppet::Provider::Package) 
         line.chomp!
         next if line.empty?
 
-        taps << new({ :name => line, :ensure => 'present', :provider => 'tap' })
+        taps << new({ :name => line, :ensure => "present", :provider => "tap" })
       end
       taps
     rescue Puppet::ExecutionFailure => detail

@@ -1,7 +1,7 @@
-require 'puppet/provider/package'
+require "puppet/provider/package"
 
 Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package) do
-  desc 'Package management using HomeBrew on OSX'
+  desc "Package management using HomeBrew on OSX"
 
   confine :operatingsystem => :darwin
 
@@ -12,13 +12,13 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
 
   has_feature :install_options
 
-  commands :brew => '/usr/local/bin/brew'
-  commands :stat => '/usr/bin/stat'
+  commands :brew => "/usr/local/bin/brew"
+  commands :stat => "/usr/bin/stat"
 
   def self.execute(cmd, failonfail = false, combine = false)
-    owner = stat('-nf', '%Uu', '/usr/local/bin/brew').to_i
-    group = stat('-nf', '%Ug', '/usr/local/bin/brew').to_i
-    home  = Etc.getpwuid(owner).dir
+    owner = stat("-nf", "%Uu", "/usr/local/bin/brew").to_i
+    group = stat("-nf", "%Ug", "/usr/local/bin/brew").to_i
+    home = Etc.getpwuid(owner).dir
 
     if owner == 0
       raise Puppet::ExecutionFailure, 'Homebrew does not support installations owned by the "root" user. Please check the permissions of /usr/local/bin/brew'
@@ -36,11 +36,11 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
     if Puppet.features.bundled_environment?
       Bundler.with_clean_env do
         super(cmd, :uid => uid, :gid => gid, :combine => combine,
-              :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                   :custom_environment => { "HOME" => home }, :failonfail => failonfail)
       end
     else
       super(cmd, :uid => uid, :gid => gid, :combine => combine,
-            :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                 :custom_environment => { "HOME" => home }, :failonfail => failonfail)
     end
   end
 
@@ -138,12 +138,12 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
     end
   end
 
-  def self.package_list(options={})
+  def self.package_list(options = {})
     Puppet.debug "Listing installed packages"
 
-    cmd_line = [command(:brew), :list, '--versions']
+    cmd_line = [command(:brew), :list, "--versions"]
     if options[:justme]
-      cmd_line += [ options[:justme] ]
+      cmd_line += [options[:justme]]
     end
 
     begin
@@ -158,7 +158,7 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
     re_excludes = Regexp.union([
       /^==>.*/,
       /^Tapped \d+ formulae.*/,
-      ])
+    ])
     lines = cmd_output.lines.delete_if { |line| line.match(re_excludes) }
 
     if options[:justme]
@@ -174,16 +174,16 @@ Puppet::Type.type(:package).provide(:brew, :parent => Puppet::Provider::Package)
         return name_version_split(line)
       end
     else
-      return lines.map{ |line| name_version_split(line) }
+      return lines.map { |line| name_version_split(line) }
     end
   end
 
   def self.name_version_split(line)
     if line =~ (/^(\S+)\s+(.+)/)
       {
-        :name     => $1,
-        :ensure   => $2,
-        :provider => :brew
+        :name => $1,
+        :ensure => $2,
+        :provider => :brew,
       }
     else
       Puppet.warning "Could not match #{line}"

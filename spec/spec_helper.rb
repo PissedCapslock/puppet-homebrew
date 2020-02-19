@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'puppetlabs_spec_helper/module_spec_helper'
-require 'rspec-puppet-facts'
+require "puppetlabs_spec_helper/module_spec_helper"
+require "rspec-puppet-facts"
 
-require 'spec_helper_local' if File.file?(File.join(File.dirname(__FILE__), 'spec_helper_local.rb'))
+require "spec_helper_local" if File.file?(File.join(File.dirname(__FILE__), "spec_helper_local.rb"))
 
 include RspecPuppetFacts
 
@@ -13,8 +13,8 @@ default_facts = {
 }
 
 default_fact_files = [
-  File.expand_path(File.join(File.dirname(__FILE__), 'default_facts.yml')),
-  File.expand_path(File.join(File.dirname(__FILE__), 'default_module_facts.yml')),
+  File.expand_path(File.join(File.dirname(__FILE__), "default_facts.yml")),
+  File.expand_path(File.join(File.dirname(__FILE__), "default_module_facts.yml")),
 ]
 
 default_fact_files.each do |f|
@@ -39,7 +39,7 @@ RSpec.configure do |c|
     # by default Puppet runs at warning level
     Puppet.settings[:strict] = :warning
   end
-  c.filter_run_excluding(bolt: true) unless ENV['GEM_BOLT']
+  c.filter_run_excluding(bolt: true) unless ENV["GEM_BOLT"]
   c.after(:suite) do
   end
 end
@@ -47,7 +47,7 @@ end
 # Ensures that a module is defined
 # @param module_name Name of the module
 def ensure_module_defined(module_name)
-  module_name.split('::').reduce(Object) do |last_module, next_module|
+  module_name.split("::").reduce(Object) do |last_module, next_module|
     last_module.const_set(next_module, Module.new) unless last_module.const_defined?(next_module, false)
     last_module.const_get(next_module, false)
   end
