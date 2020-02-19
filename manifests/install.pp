@@ -1,3 +1,4 @@
+# Installs homebrew
 class homebrew::install {
 
   $brew_sys_folders = [

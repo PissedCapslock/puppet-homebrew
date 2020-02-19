@@ -1,3 +1,4 @@
+# Init class for the puppet-homebrew module
 class homebrew (
   $user,
   $command_line_tools_package = undef,

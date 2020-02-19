@@ -1,3 +1,4 @@
+# Xcode command line tools management
 class homebrew::compiler {
 
   if str2bool($::has_compiler) {

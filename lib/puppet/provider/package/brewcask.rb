@@ -1,4 +1,4 @@
-require 'puppet/provider/package'
+require "puppet/provider/package"
 
 Puppet::Type.type(:package).provide(:brewcask, :parent => Puppet::Provider::Package) do
   desc "Package management using HomeBrew casks on OSX"
@@ -12,13 +12,13 @@ Puppet::Type.type(:package).provide(:brewcask, :parent => Puppet::Provider::Pack
 
   has_feature :install_options
 
-  commands :brew => '/usr/local/bin/brew'
-  commands :stat => '/usr/bin/stat'
+  commands :brew => "/usr/local/bin/brew"
+  commands :stat => "/usr/bin/stat"
 
   def self.execute(cmd, failonfail = false, combine = false)
-    owner = stat('-nf', '%Uu', '/usr/local/bin/brew').to_i
-    group = stat('-nf', '%Ug', '/usr/local/bin/brew').to_i
-    home  = Etc.getpwuid(owner).dir
+    owner = stat("-nf", "%Uu", "/usr/local/bin/brew").to_i
+    group = stat("-nf", "%Ug", "/usr/local/bin/brew").to_i
+    home = Etc.getpwuid(owner).dir
 
     if owner == 0
       raise Puppet::ExecutionFailure, 'Homebrew does not support installations owned by the "root" user. Please check the permissions of /usr/local/bin/brew'
@@ -36,11 +36,11 @@ Puppet::Type.type(:package).provide(:brewcask, :parent => Puppet::Provider::Pack
     if Puppet.features.bundled_environment?
       Bundler.with_clean_env do
         super(cmd, :uid => uid, :gid => gid, :combine => combine,
-              :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                   :custom_environment => { "HOME" => home }, :failonfail => failonfail)
       end
     else
       super(cmd, :uid => uid, :gid => gid, :combine => combine,
-            :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+                 :custom_environment => { "HOME" => home }, :failonfail => failonfail)
     end
   end
 
@@ -134,20 +134,20 @@ Puppet::Type.type(:package).provide(:brewcask, :parent => Puppet::Provider::Pack
     install
   end
 
-  def self.package_list(options={})
+  def self.package_list(options = {})
     Puppet.debug "Listing installed packages"
     begin
       if resource_name = options[:justme]
-        result = execute([command(:brew), :cask, :list, '--versions', resource_name])
+        result = execute([command(:brew), :cask, :list, "--versions", resource_name])
         if result.empty?
           Puppet.debug "Package #{resource_name} not installed"
         else
           Puppet.debug "Found package #{result}"
         end
       else
-        result = execute([command(:brew), :cask, :list, '--versions'])
+        result = execute([command(:brew), :cask, :list, "--versions"])
       end
-      list = result.lines.map {|line| name_version_split(line)}
+      list = result.lines.map { |line| name_version_split(line) }
     rescue Puppet::ExecutionFailure => detail
       raise Puppet::Error, "Could not list packages: #{detail}"
     end
@@ -162,9 +162,9 @@ Puppet::Type.type(:package).provide(:brewcask, :parent => Puppet::Provider::Pack
   def self.name_version_split(line)
     if line =~ (/^(\S+)\s+(.+)/)
       {
-        :name     => $1,
-        :ensure   => $2,
-        :provider => :brewcask
+        :name => $1,
+        :ensure => $2,
+        :provider => :brewcask,
       }
     else
       Puppet.warning "Could not match #{line}"
