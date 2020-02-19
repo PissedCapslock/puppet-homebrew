@@ -1,12 +1,12 @@
 {
   "name": "call-homebrew",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "author": "call",
   "summary": "Homebrew (+brewcask! +taps!) package installer and provider",
   "license": "Apache-2.0",
-  "source": "https://github.com/TheKevJames/puppet-homebrew",
-  "project_page": "https://github.com/TheKevJames/puppet-homebrew",
-  "issues_url": "https://github.com/TheKevJames/puppet-homebrew/issues",
+  "source": "https://github.com/call/puppet-homebrew",
+  "project_page": "https://github.com/call/puppet-homebrew",
+  "issues_url": "https://github.com/call/puppet-homebrew/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
