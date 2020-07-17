@@ -3,6 +3,7 @@ class homebrew::install {
 
   $brew_sys_folders = [
     '/usr/local/bin',
+    '/usr/local/sbin',
     '/usr/local/etc',
     '/usr/local/Frameworks',
     '/usr/local/include',
